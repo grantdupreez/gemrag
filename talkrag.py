@@ -1,7 +1,7 @@
 import pyttsx3
 from audio_recorder_streamlit import audio_recorder
 import streamlit as st
-import google.generativeai as gen_ai
+import google.generativeai as genai
 import hmac
 
 from config import SAFETY_SETTINGS, GENERATION_CONFIG, MODEL_NAME, SYSTEM_PROMPT
