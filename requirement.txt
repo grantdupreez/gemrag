@@ -7,3 +7,6 @@ vertexai
 audio_recorder_streamlit
 google.cloud
 simpleaudio
+gtts
+pydub
+speech_recognition 
