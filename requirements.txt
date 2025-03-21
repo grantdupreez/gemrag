@@ -1,2 +1,4 @@
 google-generativeai
 streamlit
+audio-recorder-streamlit
+pyttsx3
