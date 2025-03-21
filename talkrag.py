@@ -41,7 +41,7 @@ if not check_password():
 
 
 st.set_page_config(
-    page_title="Chat with Gemini-Pro!",
+    page_title="Chat with Gemini Flash!",
     page_icon=":brain:",
     layout="centered",
 )
