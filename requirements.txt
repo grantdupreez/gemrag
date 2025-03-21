@@ -3,5 +3,4 @@ streamlit
 audio-recorder-streamlit
 PyPl
 pyttsx3
-py-espeak-ng
 python-espeak==0.6.3
