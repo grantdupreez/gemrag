@@ -3,4 +3,4 @@ streamlit
 audio-recorder-streamlit
 PyPl
 pyttsx3
-espeak_ng
+espeakng==1.0.3
