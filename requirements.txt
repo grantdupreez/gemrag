@@ -3,4 +3,3 @@ streamlit
 audio-recorder-streamlit
 pyttsx3
 py-espeak-ng
-python-espeak
