@@ -71,6 +71,7 @@ def text_to_speech(tts_engine, response_text):
 
 
 def run():
+    API_KEY = st.secrets["auth_key"]
     genai.configure(api_key=API_KEY)
     model = genai.GenerativeModel(
         model_name=MODEL_NAME,
