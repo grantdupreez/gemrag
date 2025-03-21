@@ -1,2 +1,6 @@
 streamlit
 simpleaudio
+google-genai
+google-cloud-speech
+google-cloud-texttospeech
+playsound
