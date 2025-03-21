@@ -46,7 +46,7 @@ st.set_page_config(
     layout="centered",
 )
 
-GOOGLE_API_KEY = st.secrets["api_key"]
+GOOGLE_API_KEY = st.secrets["auth_key"]
 gen_ai.configure(api_key=GOOGLE_API_KEY)
 model = gen_ai.GenerativeModel("gemini-2.0-flash-001")
 
