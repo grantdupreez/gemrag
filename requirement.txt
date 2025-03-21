@@ -1,9 +1,2 @@
 streamlit
-google-genai
-google-cloud-speech
-vertexai
-audio_recorder_streamlit
-google.cloud
-gtts
-pydub
-speech_recognition 
+google-generativeai
