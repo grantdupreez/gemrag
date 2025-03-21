@@ -1,6 +1,6 @@
 google-generativeai
 streamlit
-audio-recorder-streamlit
+audio-recorder-streamlit==0.0.10
 PyPl
-pyttsx3
+pyttsx3==2.98
 espeak
