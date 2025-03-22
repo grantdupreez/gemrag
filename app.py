@@ -98,6 +98,3 @@ if st.session_state.messages[-1]["role"] != "assistant":
 # Float the footer container and provide CSS to target it with
 footer_container.float("bottom: 0rem;")
 
-# Run the app
-if __name__ == "__main__":
-    main()
