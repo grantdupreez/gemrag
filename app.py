@@ -55,8 +55,6 @@ if not check_password():
     st.stop()
 
 
-OPENAI_API_KEY = st.secrets["auth_key"]
-
 
 # Float feature initialization
 float_init()
