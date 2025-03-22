@@ -241,7 +241,7 @@ def qa_ret(qdrant_store, input_query):
 
         # Initialize the GPT model (gpt-4o-mini) with a moderate creativity level
         model = ChatOpenAI(
-            model_name="gpt-4o-mini",
+            model_name="gpt-3.5-turbo",
             temperature=0.3,
             openai_api_key=OPENAI_API_KEY
         )
