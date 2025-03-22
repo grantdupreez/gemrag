@@ -76,7 +76,7 @@ def display_conversation():
 # Start interaction
 if st.button("Start Speaking"):
     status_placeholder.text("Listening... 🎙️")
-    image_placeholder=st.image("assets/listening_audio.gif", width=150, caption="Listening...")  # Adjust width as needed
+    image_placeholder=st.image("listening_audio.gif", width=150, caption="Listening...")  # Adjust width as needed
     # Step 1: Capture and transcribe speech
     transcribed_text = asyncio.run(capture_and_transcribe_audio())
     image_placeholder.empty()
