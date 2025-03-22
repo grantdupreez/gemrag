@@ -9,6 +9,5 @@ edge-tts
 dspy
 soundfile
 streamlit-webrtc
-python-dotenv
 pygame
 asyncio
