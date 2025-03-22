@@ -1,23 +1,9 @@
 import streamlit as st
-from langchain.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough, RunnableParallel
-from langchain_core.output_parsers import StrOutputParser
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain.chat_models import ChatOpenAI
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Qdrant
-from qdrant_client import QdrantClient
-import tempfile
-from gtts import gTTS
-from io import BytesIO
-from streamlit_mic_recorder import speech_to_text
-import base64
 import os
-import hmac
 from utils import get_answer, text_to_speech, autoplay_audio, speech_to_text
 from audio_recorder_streamlit import audio_recorder
 from streamlit_float import *
+import hmac
 
 
 def check_password():
