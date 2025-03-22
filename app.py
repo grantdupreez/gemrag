@@ -55,7 +55,7 @@ if not check_password():
 
 OPENAI_API_KEY = st.secrets["auth_key"]
 QDRANT_URL = st.secrets["qdrant_url"]
-QDRANT_API_KEY = st.secrets["Qqdrant_api"]
+QDRANT_API_KEY = st.secrets["qdrant_api"]
 
 
 # Initialize session state variables
