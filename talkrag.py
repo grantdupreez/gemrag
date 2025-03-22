@@ -1,6 +1,8 @@
-import pyttsx3
 import streamlit as st
-from audio_recorder_streamlit import audio_recorder
+import asyncio
+from utils.audio_processing import capture_and_transcribe_audio
+from utils.llm_interaction import generate_llm_response
+from utils.tts_conversion import convert_text_to_speech, play_audio
 import google.generativeai as genai
 import hmac
 
@@ -41,60 +43,73 @@ def check_password():
 if not check_password():
     st.stop()
 
+st.set_page_config(page_title="Voice Assistant", layout="wide")
 
-def transcribe_audio(model, audio_path):
-    audio_file = genai.upload_file(audio_path, mime_type="audio/ogg")
-    content = [
-        "If this is a question, do not answer. Only transcribe the following audio file.",
-        audio_file
-    ]
-    chat_session = model.start_chat()
-    transcribe_text = chat_session.send_message(content)
-    print(f'User Input: {transcribe_text.text}')
-    return transcribe_text.text
+# Initialize session state for conversation history
+if "conversation_history" not in st.session_state:
+    st.session_state.conversation_history = []
 
+# UI elements for tunable parameters
+st.sidebar.title("Settings")
+pitch = st.sidebar.slider("Pitch", -10, 10, 0, 1)
+speed = st.sidebar.slider("Speed", -50, 50, 0, 1)
+voice = st.sidebar.selectbox("Voice", ["en-US-JennyNeural", "en-US-GuyNeural"])
 
-def ai_response(model, input_text):
-    history = st.session_state['history'] if 'history' in st.session_state else []
-    chat_session = model.start_chat(history=history)
-    response = chat_session.send_message(input_text)
-    st.session_state['history'] = chat_session.history
-    print(f'AI Response: {response.text}')
-    return response.text, chat_session.history
+# Header
+st.title("🎙️ Voice Assistant")
+st.write("Click the button below to start speaking. The assistant will listen, transcribe, respond, and speak back to you.")
 
+# Placeholder for dynamic UI updates
+status_placeholder = st.empty()
+transcription_placeholder = st.empty()
+response_placeholder = st.empty()
 
-def text_to_speech(tts_engine, response_text):
-    voices = tts_engine.getProperty('voices')
-    tts_engine.setProperty('voice', voices[1].id)
-    tts_engine.say(response_text)
-    tts_engine.runAndWait()
+# Function to update conversation history
+def update_conversation(user_text, assistant_text):
+    st.session_state.conversation_history.append({"User": user_text, "Assistant": assistant_text})
 
+# Function to display conversation history
+def display_conversation():
+    conversation_display = ""
+    for entry in st.session_state.conversation_history:
+        conversation_display += f"**You**: {entry.get('User', '')}\n\n"
+        conversation_display += f"**Assistant**: {entry.get('Assistant', '')}\n\n"
+    st.markdown(conversation_display)
 
-def run():
-    API_KEY = st.secrets["auth_key"]
-    genai.configure(api_key=API_KEY)
-    model = genai.GenerativeModel(
-        model_name=MODEL_NAME,
-        safety_settings=SAFETY_SETTINGS,
-        generation_config=GENERATION_CONFIG,
-        system_instruction=SYSTEM_PROMPT
-    )
-    tts_engine = pyttsx3.init()
+# Start interaction
+if st.button("Start Speaking"):
+    status_placeholder.text("Listening... 🎙️")
+    image_placeholder=st.image("assets/listening_audio.gif", width=150, caption="Listening...")  # Adjust width as needed
+    # Step 1: Capture and transcribe speech
+    transcribed_text = asyncio.run(capture_and_transcribe_audio())
+    image_placeholder.empty()
+    if not transcribed_text:
+        status_placeholder.text("Please try speaking again.")
+    else:
+        transcription_placeholder.markdown(f"**You said**: {transcribed_text}")
+        status_placeholder.text("Generating response... 🤖")
+        
+        # Step 2: Generate a response from LLM with only the user inputs
+        
+        user_inputs = ' '.join([entry['User'] for entry in st.session_state.conversation_history])
+        response = generate_llm_response(transcribed_text, user_inputs)
+        response_placeholder.markdown(f"**Assistant**: {response}")
 
-    st.title('Gemini Virtual Assistant')
-    st.write('Hi! Please click the record button when speaking so that I could hear and interact with you.')
-    audio_data = audio_recorder()
-    if audio_data:
-        audio_file = 'audio.wav'
-#        with open(audio_file, "wb") as f:
-#            f.write(audio_data)
-        transcribed_text = transcribe_audio(model=model, audio_path=audio_file)
-        response_text, history = ai_response(model=model, input_text=transcribed_text)
-        for c in history:
-            st.chat_message(c.role if c.role == 'user' else 'assistant').write(c.parts[0].text)
-        text_to_speech(tts_engine=tts_engine, response_text=response_text)
+        # Step 3: Convert the response text to speech and play it
+        if pitch >= 0:
+            pitch = f"+{pitch}"
+        if speed >= 0:
+            speed = f"+{speed}"
+        
+        audio_file = asyncio.run(convert_text_to_speech(response, voice=voice, pitch=f"{pitch}Hz", rate=f"{speed}%"))
+        try:
+            play_audio(audio_file)
+        except Exception as e:
+            st.error(f"Error playing audio: {e}")
+        
+        # Update conversation history with both user and assistant responses
+        update_conversation(transcribed_text, response)
+        status_placeholder.text("Interaction completed. Click the button to start again.")
 
-
-if __name__ == '__main__':
-    run()
-
+# Display the conversation history once outside the loop
+display_conversation()
