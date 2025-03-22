@@ -11,3 +11,5 @@ soundfile
 streamlit-webrtc
 pygame
 asyncio
+google-cloud-speech
+google-cloud-texttospeech 
