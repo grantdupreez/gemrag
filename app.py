@@ -14,6 +14,8 @@ from io import BytesIO
 from streamlit_mic_recorder import speech_to_text
 import base64
 import os
+import hmac
+
 
 def check_password():
     """Returns `True` if the user had a correct password."""
