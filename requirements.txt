@@ -1,5 +1,5 @@
-audio-recorder-streamlit==0.0.9
-streamlit==1.29.0
-pyttsx3==2.90
+streamlit
 google.generativeai
-libespeak
+datetime
+speech_recognition
+pyttsx3
