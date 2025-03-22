@@ -86,8 +86,8 @@ def run():
     audio_data = audio_recorder()
     if audio_data:
         audio_file = 'audio.wav'
-        with open(audio_file, "wb") as f:
-            f.write(audio_data)
+#        with open(audio_file, "wb") as f:
+#            f.write(audio_data)
         transcribed_text = transcribe_audio(model=model, audio_path=audio_file)
         response_text, history = ai_response(model=model, input_text=transcribed_text)
         for c in history:
