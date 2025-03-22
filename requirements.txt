@@ -2,3 +2,13 @@ streamlit
 google.generativeai
 pyttsx3==2.90
 audio-recorder-streamlit
+sounddevice
+numpy
+faster-whisper
+edge-tts
+dspy
+soundfile
+streamlit-webrtc
+python-dotenv
+pygame
+asyncio
