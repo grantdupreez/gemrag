@@ -3,10 +3,7 @@ import asyncio
 from utils.audio_processing import capture_and_transcribe_audio
 from utils.llm_interaction import generate_llm_response
 from utils.tts_conversion import convert_text_to_speech, play_audio
-import google.generativeai as genai
 import hmac
-
-from config import SAFETY_SETTINGS, GENERATION_CONFIG, MODEL_NAME, SYSTEM_PROMPT
 
 def check_password():
     """Returns `True` if the user had a correct password."""
