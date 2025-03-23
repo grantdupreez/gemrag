@@ -77,10 +77,7 @@ if audio_bytes:
         with open(webm_file_path, "wb") as f:
             f.write(audio_bytes)
 
-        try:
-            transcript = speech_to_text(webm_file_path)
-        except ValueError:
-            print("Oops! Mic not active")
+        transcript = speech_to_text(webm_file_path)
             
         if transcript:
             st.session_state.messages.append({"role": "user", "content": transcript})
