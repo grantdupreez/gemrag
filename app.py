@@ -81,6 +81,7 @@ if audio_bytes:
             transcript = speech_to_text(webm_file_path)
         except:
             st.write("Mic not active")
+            pass
             
         if transcript:
             st.session_state.messages.append({"role": "user", "content": transcript})
