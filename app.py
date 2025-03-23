@@ -86,7 +86,7 @@ if audio_bytes:
                     st.write(transcript)
                 os.remove(webm_file_path)
         except:
-            st.write("Mic not active")
+#            st.write("Mic not active")
             pass
 
 
