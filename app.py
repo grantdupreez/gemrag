@@ -91,7 +91,8 @@ if st.session_state.messages[-1]["role"] != "assistant":
         with st.spinner("Generating audio response..."):    
             audio_file = text_to_speech(final_response)
             
-            asyncio.run(autoplay_audio(audio_file))
+#            asyncio.run(autoplay_audio(audio_file))
+            autoplay_audio(audio_file)
             
         st.write(final_response)
         st.session_state.messages.append({"role": "assistant", "content": final_response})
