@@ -17,7 +17,6 @@ def get_answer(messages):
         model=openai_model,
         voice=openai_voice,
         messages=messages,
-        instructions=openai_instr,
     )
     return response.choices[0].message.content
 
