@@ -77,12 +77,15 @@ if audio_bytes:
         with open(webm_file_path, "wb") as f:
             f.write(audio_bytes)
 
-        transcript = speech_to_text(webm_file_path)
-        if transcript:
-            st.session_state.messages.append({"role": "user", "content": transcript})
-            with st.chat_message("user"):
-                st.write(transcript)
-            os.remove(webm_file_path)
+        try:
+            transcript = speech_to_text(webm_file_path)
+            if transcript:
+                st.session_state.messages.append({"role": "user", "content": transcript})
+                with st.chat_message("user"):
+                    st.write(transcript)
+                os.remove(webm_file_path)
+        except ValueError:
+            print("Oops! Mic not active")
 
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
