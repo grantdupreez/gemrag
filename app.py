@@ -4,7 +4,7 @@ from utils import get_answer, text_to_speech, autoplay_audio, speech_to_text
 from audio_recorder_streamlit import audio_recorder
 from streamlit_float import *
 import hmac
-
+import asyncio
 
 def check_password():
     """Returns `True` if the user had a correct password."""
@@ -90,7 +90,9 @@ if st.session_state.messages[-1]["role"] != "assistant":
             final_response = get_answer(st.session_state.messages)
         with st.spinner("Generating audio response..."):    
             audio_file = text_to_speech(final_response)
-            autoplay_audio(audio_file)
+            
+            asyncio.run(autoplay_audio(audio_file))
+            
         st.write(final_response)
         st.session_state.messages.append({"role": "assistant", "content": final_response})
         os.remove(audio_file)
