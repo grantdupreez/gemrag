@@ -32,8 +32,8 @@ def speech_to_text(audio_data):
 
 def text_to_speech(input_text):
     response = client.audio.speech.create(
-        model="tts-1",
-        voice="nova",
+        model=openai_model,
+        voice=openai_voice,
         input=input_text
     )
     webm_file_path = "temp_audio_play.mp3"
