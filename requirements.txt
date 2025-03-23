@@ -6,3 +6,4 @@ asyncio
 PyPDF2
 Langchain
 langchain_community
+langchain_anthropic
