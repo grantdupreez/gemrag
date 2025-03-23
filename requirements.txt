@@ -5,3 +5,4 @@ streamlit-float
 asyncio
 PyPDF2
 Langchain
+langchain_community
