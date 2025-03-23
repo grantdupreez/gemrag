@@ -3,3 +3,6 @@ openai
 audio_recorder_streamlit
 streamlit-float
 asyncio
+PyPDF2
+Langchain
+FAISS
