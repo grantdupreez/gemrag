@@ -7,8 +7,6 @@ api_key = st.secrets["auth_key"]
 client = OpenAI(api_key=api_key)
 openai_model = st.secrets["openai_model"]
 openai_voice = st.secrets["openai_voice"]
-openai_instr = st.secrets["openai_instr"]
-
 
 def get_answer(messages):
     system_message = [{"role": "system", "content": "You are an helpful AI chatbot, that answers questions asked by User."}]
