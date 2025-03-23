@@ -16,13 +16,16 @@ def get_answer(messages):
     return response.choices[0].message.content
 
 def speech_to_text(audio_data):
-    with open(audio_data, "rb") as audio_file:
-        transcript = client.audio.transcriptions.create(
-            model="whisper-1",
-            response_format="text",
-            file=audio_file
-        )
-    return transcript
+    try:
+        with open(audio_data, "rb") as audio_file:
+            transcript = client.audio.transcriptions.create(
+                model="whisper-1",
+                response_format="text",
+                file=audio_file
+            )
+        return transcript
+    except Exception as e:
+        return ("Mic not active')
 
 def text_to_speech(input_text):
     response = client.audio.speech.create(
