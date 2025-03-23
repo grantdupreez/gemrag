@@ -15,7 +15,6 @@ def get_answer(messages):
     messages = system_message + messages
     response = client.chat.completions.create(
         model=openai_model,
-        voice=openai_voice,
         messages=messages,
     )
     return response.choices[0].message.content
