@@ -5,6 +5,15 @@ from audio_recorder_streamlit import audio_recorder
 from streamlit_float import *
 import hmac
 import asyncio
+from PyPDF2 import PdfReader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_community.embeddings.spacy_embeddings import SpacyEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain.tools.retriever import create_retriever_tool
+from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain.agents import AgentExecutor, create_tool_calling_agent
 
 def check_password():
     """Returns `True` if the user had a correct password."""
@@ -43,7 +52,29 @@ def check_password():
 if not check_password():
     st.stop()
 
+#=========================================================
 
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
+embeddings = SpacyEmbeddings(model_name="en_core_web_sm")
+def pdf_read(pdf_doc):
+    text = ""
+    for pdf in pdf_doc:
+        pdf_reader = PdfReader(pdf)
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    return text
+
+def get_chunks(text):
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    chunks = text_splitter.split_text(text)
+    return chunks
+
+
+def vector_store(text_chunks):    
+    vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
+    vector_store.save_local("faiss_db")
 
 # Float feature initialization
 float_init()
@@ -87,7 +118,15 @@ if audio_bytes:
         except:
             st.write("Mic not active")
             pass
-            
+
+
+def user_input(user_question):
+    new_db = FAISS.load_local("faiss_db", embeddings,allow_dangerous_deserialization=True)   
+    retriever=new_db.as_retriever()
+    retrieval_chain= create_retriever_tool(retriever,"pdf_extractor","This tool is to give answer to queries from the pdf")
+    get_conversational_chain(retrieval_chain,user_question)
+
+
 
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
@@ -106,3 +145,23 @@ if st.session_state.messages[-1]["role"] != "assistant":
 # Float the footer container and provide CSS to target it with
 footer_container.float("bottom: 0rem;")
 
+
+def main():
+
+    user_question = st.text_input("Ask a Question from the PDF Files")
+
+    if user_question:
+        user_input(user_question)
+
+    with st.sidebar:
+        st.title("Menu:")
+        pdf_doc = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
+        if st.button("Submit & Process"):
+            with st.spinner("Processing..."):
+                raw_text = pdf_read(pdf_doc)
+                text_chunks = get_chunks(raw_text)
+                vector_store(text_chunks)
+                st.success("Done")
+
+if __name__ == "__main__":
+    main()
