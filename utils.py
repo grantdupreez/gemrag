@@ -25,7 +25,7 @@ def speech_to_text(audio_data):
             )
         return transcript
     except Exception as e:
-        return ("Mic not active')
+        return ("Mic not active")
 
 def text_to_speech(input_text):
     response = client.audio.speech.create(
