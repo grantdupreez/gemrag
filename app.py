@@ -58,7 +58,7 @@ def initialize_session_state():
 
 initialize_session_state()
 
-st.title("OpenAI Conversational Chatbot 🤖")
+st.title("Conversational Chatbot 💬")
 
 # Create footer container for the microphone
 footer_container = st.container()
